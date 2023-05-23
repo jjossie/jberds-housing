@@ -19,9 +19,9 @@ class EvaluationSet:
         self.models = pd.DataFrame({
             "id": [],
             "split": [],
-            "learning_rate": [],
-            "n_estimators": [],
-            "max_depth": [],
+            # "learning_rate": [],
+            # "n_estimators": [],
+            # "max_depth": [],
             "r2": [],
             "rmse": [],
         })
@@ -30,32 +30,34 @@ class EvaluationSet:
         r2 = r2_score(y_test, y_pred)
         rmse = mean_squared_error(y_test, y_pred, squared=False)
 
+        print(f"evaluating {model_id}: \n\tR2: {r2}\n\tRMSE: {rmse}")
+
         self.models.loc[len(self.models)] = [model_id, split, r2, rmse]
 
     def report(self):
-        # sns.barplot(
+        sns.barplot(
+            data=self.models,
+            x="id",
+            y="r2",
+        )
+        # sns.lmplot(
         #     data=self.models,
-        #     x="id",
+        #     x="learning_rate",
         #     y="r2",
+        #     hue="split"
         # )
-        sns.lmplot(
-            data=self.models,
-            x="learning_rate",
-            y="r2",
-            hue="split"
-        )
-        sns.lmplot(
-            data=self.models,
-            x="n_estimators",
-            y="r2",
-            hue="split"
-        )
-        sns.lmplot(
-            data=self.models,
-            x="max_depth",
-            y="r2",
-            hue="split"
-        )
+        # sns.lmplot(
+        #     data=self.models,
+        #     x="n_estimators",
+        #     y="r2",
+        #     hue="split"
+        # )
+        # sns.lmplot(
+        #     data=self.models,
+        #     x="max_depth",
+        #     y="r2",
+        #     hue="split"
+        # )
 
     def create_subspaced_models(self, X: pd.DataFrame, y: pd.Series):
         for i in range(10):
